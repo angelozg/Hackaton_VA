@@ -3,7 +3,7 @@ package ch.vaudoise.vaapi.dctm.servlet;
 
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
-import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.*;
 
 public class DCTMApplication extends ResourceConfig {
 
