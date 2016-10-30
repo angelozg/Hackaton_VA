@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	attributeFormDefault="unqualified" elementFormDefault="qualified"
+	targetNamespace="http://www.vaudoise.ch/vaapi/dctm/services/column/jaxb"
+	xmlns:va="http://www.vaudoise.ch/vaapi/dctm/services/column/jaxb">
+	<xs:element name="column_config">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="columns" type="va:columns" minOccurs="0" />
+			</xs:sequence>
+			<xs:attribute name="scope" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="columns">
+		<xs:sequence>
+			<xs:element name="column" maxOccurs="unbounded" type="va:column" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="column">
+		<xs:sequence>
+			<xs:element name="attribute" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

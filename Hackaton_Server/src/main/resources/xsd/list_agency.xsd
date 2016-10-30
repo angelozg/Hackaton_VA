@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	attributeFormDefault="unqualified" elementFormDefault="qualified"
+	targetNamespace="http://www.vaudoise.ch/vaapi/dctm/services/agency/jaxb"
+	xmlns:va="http://www.vaudoise.ch/vaapi/dctm/services/agency/jaxb">
+	<xs:element name="agencies">
+	 <xs:complexType>
+         <xs:sequence>
+            <xs:element name="agency" type="va:agency_element" minOccurs="1" maxOccurs="unbounded" />
+         </xs:sequence>
+      </xs:complexType>
+		
+	</xs:element>
+
+	<xs:complexType name="agency_element" >
+			<xs:attribute name="nlsid" type="xs:string" />
+			<xs:attribute name="value" type="xs:string" />
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	attributeFormDefault="unqualified" elementFormDefault="qualified"
+	targetNamespace="http://www.vaudoise.ch/vaapi/dctm/services/filter/operator/jaxb"
+	xmlns:va="http://www.vaudoise.ch/vaapi/dctm/services/filter/operator/jaxb">
+	<xs:element name="filter_operator">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="attribute" minOccurs="1" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="operator" maxOccurs="unbounded">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+								      <xs:enumeration value="Eq"/> 
+								      <xs:enumeration value="Neq"/>
+								      <xs:enumeration value="Sw"/>
+								      <xs:enumeration value="Ew"/>
+								      <xs:enumeration value="Cont"/>
+								      <xs:enumeration value="Ncont"/>
+								      <xs:enumeration value="Gte"/>
+								      <xs:enumeration value="Gt"/>
+								      <xs:enumeration value="Lte"/>
+								      <xs:enumeration value="Lt"/>
+								      <xs:enumeration value="In"/>
+								      <xs:enumeration value="Btw"/>
+								    </xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="name" type="xs:string" />
+						<xs:attribute name="uiHint" type="xs:string" />
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	
+
+</xs:schema>

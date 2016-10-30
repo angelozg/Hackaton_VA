@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.vaudoise.ch/vaapi/dctm/services/dashboard/cards/jaxb" xmlns:va="http://www.vaudoise.ch/vaapi/dctm/services/dashboard/cards/jaxb">
+   
+
+   <xs:element name="dashboard_cards_config">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="dashboardcards" type="va:dashboardcards" />
+            <xs:element name="cardfilters" type="va:cardfilters" />
+         </xs:sequence>
+      </xs:complexType> 
+   </xs:element>
+
+   <xs:complexType name="dashboardcards"> 
+      <xs:sequence>
+         <xs:element name="dashboardcard"  maxOccurs="unbounded" type="va:dashboardcard" />
+      </xs:sequence>
+   </xs:complexType>
+
+   <xs:complexType name="dashboardcard">
+      <xs:sequence>
+         <xs:element name="primaryfilter" type="va:filterconfig" minOccurs="0"/>
+         <xs:element name="secondaryfilter" type="va:filterconfig" minOccurs="0"/>
+         <xs:element name="ignoreDql" type="xs:string" minOccurs="0" default=""/>
+         <xs:element name="emptyIgnoreDql" type="xs:string" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="name" type="xs:string" use="required"/>
+      <xs:attribute name="type" type="va:type" use="required"/>
+      <xs:attribute name="status" type="va:status" use="optional" default="success" />
+   </xs:complexType>
+
+   <xs:complexType name="filterconfig">
+      <xs:attribute name="name" type="xs:string" use="required"/>
+      <xs:attribute name="label" type="xs:string" use="required"/>
+      <xs:attribute name="icon" type="xs:string" use="required"/>
+      <xs:attribute name="query" type="xs:string" use="required"/>
+   </xs:complexType>
+
+
+	 <xs:simpleType name="type">
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="tile" />
+         <xs:enumeration value="report" />
+         <xs:enumeration value="datepicker" />
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="status">
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="success" />
+         <xs:enumeration value="info" />
+         <xs:enumeration value="warning" />
+         <xs:enumeration value="danger" />
+      </xs:restriction>
+   </xs:simpleType>
+   
+   
+    <xs:complexType name="cardfilters"> 
+      <xs:sequence>
+         <xs:element name="cardfilter"  maxOccurs="unbounded" type="va:cardfilter" />
+      </xs:sequence>
+   </xs:complexType>
+
+    <xs:complexType name="cardfilter">
+    	<xs:sequence>
+	   		 <xs:element name="cardfilterElements" type="va:cardfilterElements" />
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:string" use="required"/>
+   </xs:complexType>
+   
+   <xs:complexType name="cardfilterElements">
+		<xs:sequence>
+			<xs:element name="cardfilterElement" maxOccurs="unbounded" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="property" type="xs:string" />
+						<xs:element name="value" type="xs:string" />
+						<xs:element name="operator" type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+   
+</xs:schema>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.vaudoise.ch/vaapi/dctm/services/document/jaxb" xmlns:va="http://www.vaudoise.ch/vaapi/dctm/services/document/jaxb">
+   
+   <xs:element name="document_config">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="attributes" type="va:attributes" minOccurs="0" />
+         </xs:sequence>
+         <xs:attribute name="role" type="xs:string" />
+      </xs:complexType>
+   </xs:element>
+
+   <xs:complexType name="attributes">
+      <xs:sequence>
+         <xs:element name="attribute" maxOccurs="unbounded" type="va:attribute" />
+      </xs:sequence>
+   </xs:complexType>
+
+   <xs:complexType name="attribute">
+      <xs:sequence>
+         <xs:element name="name" type="xs:string" />
+         <xs:element name="label" type="xs:string" />
+         <xs:element name="method" type="xs:string" />
+      </xs:sequence>
+   </xs:complexType>
+
+</xs:schema>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	attributeFormDefault="unqualified" elementFormDefault="qualified"
+	targetNamespace="http://www.vaudoise.ch/vaapi/dctm/services/filter/value/jaxb"
+	xmlns:va="http://www.vaudoise.ch/vaapi/dctm/services/filter/value/jaxb">
+	<xs:element name="filter_value">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="attribute" minOccurs="1" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="option" type="va:option" minOccurs="0" maxOccurs="unbounded" />
+						</xs:sequence>
+						<xs:attribute name="name" type="xs:string" />
+						<xs:attribute name="addDefault" type="xs:boolean" />
+						<xs:attribute name="role" type="xs:string" />
+						<xs:attribute name="scope" type="xs:string" />
+						<xs:attribute name="query" type="xs:string" />
+						<xs:attribute name="traduction" type="xs:string" use="optional" />
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="option">
+		<xs:attribute name="nlsid" type="xs:string" />
+		<xs:attribute name="value" type="xs:string" />
+		<xs:attribute name="getvaluemethod" type="xs:string" />
+		<xs:attribute name="role" type="xs:string" />
+	</xs:complexType>
+</xs:schema>

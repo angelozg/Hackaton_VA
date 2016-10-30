@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.vaudoise.ch/vaapi/dctm/services/dashboard/config/jaxb" xmlns:va="http://www.vaudoise.ch/vaapi/dctm/services/dashboard/config/jaxb" >
+   <xs:element name="dashboard_config">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="dashboardcardsconfig" type="va:dashboardcardsconfig" minOccurs="1" maxOccurs="unbounded" />
+         </xs:sequence>
+      </xs:complexType>
+   </xs:element>
+
+   <xs:complexType name="dashboardcardsconfig"> 
+      <xs:sequence>
+         <xs:element name="dashboardcardconfig" minOccurs="1" maxOccurs="unbounded" type="va:dashboardcardconfig" />
+      </xs:sequence>
+      <xs:attribute name="role" type="xs:string" />
+      <xs:attribute name="view" type="va:dashboardview" use="required" />
+   </xs:complexType>
+
+   <xs:complexType name="dashboardcardconfig">
+   	  <xs:attribute name="scope" type="xs:string"/>
+      <xs:attribute name="name" type="xs:string"/>
+      <xs:attribute name="posX" type="xs:int"/>
+      <xs:attribute name="posY" type="xs:int"/>
+      <xs:attribute name="spanX" type="xs:int"/>
+      <xs:attribute name="spanY" type="xs:int"/>
+   </xs:complexType>
+
+
+   <xs:simpleType name="dashboardview">
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="DASHBOARD_TEAM" />
+         <xs:enumeration value="DASHBOARD_FOLDER"/>
+      </xs:restriction>
+   </xs:simpleType>
+
+</xs:schema>
