@@ -16,11 +16,6 @@
    </properties>
 
    <dependencies>
-    <dependency>
-          <groupId>ch.vaudoise.vaapi</groupId>
-          <artifactId>VAApi-core</artifactId>
-          <version>1.1</version>
-      </dependency>
       <dependency>
          <groupId>commons-collections</groupId>
          <artifactId>commons-collections</artifactId>
