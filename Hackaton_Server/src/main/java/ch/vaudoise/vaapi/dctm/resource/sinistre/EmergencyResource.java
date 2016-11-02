@@ -17,17 +17,14 @@ import javax.ws.rs.core.Response;
 import ch.vaudoise.vaapi.dctm.model.DeclarationEau;
 import ch.vaudoise.vaapi.dctm.model.Emergency;
 
-@Path("emergency")
 public class EmergencyResource {
 	
-   final String username = "vaudoiseassistance";
-   final String from = "vaudoiseassistance@gmail.com";
-   final String password = "Hackaton";
+   final static String username = "vaudoiseassistance";
+   final static String from = "vaudoiseassistance@gmail.com";
+   final static String password = "Hackaton";
 
 
-   @PUT
-   @Path("eau")
-   public Response putEau(Emergency emergency) {
+   public static void sendMailWater(Emergency emergency) {
 
 		 Properties props = System.getProperties();
 	        String host = "smtp.gmail.com";
@@ -58,9 +55,7 @@ public class EmergencyResource {
 	        catch (MessagingException me) {
 	            me.printStackTrace();
 	        }
-	   
 	  
-      return Response.ok().build();
    }
 
 }
