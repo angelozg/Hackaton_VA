@@ -25,14 +25,14 @@ class app extends Component {
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1.id !== r2.id})
 
     this._messages = [
-      {id: '1', timestamp: 1478095424843, text: 'Hello', me: true},
-      {id: '2', timestamp: 1478095445843, text: 'Hi, can I help?', me: false},
-      {id: '3', timestamp: 1478095464843, text: 'Yeah.', me: true},
-      {id: '4', timestamp: 1478095524843, text: 'How?', me: false},
+      // {id: '1', timestamp: 1478095424843, text: 'Hello', me: true},
+      // {id: '2', timestamp: 1478095445843, text: 'Hi, can I help?', me: false},
+      // {id: '3', timestamp: 1478095464843, text: 'Yeah.', me: true},
+      // {id: '4', timestamp: 1478095524843, text: 'How?', me: false},
       // {id: '5', timestamp: 1478095544843, text: 'I\'m stuck with these crappy native style attributes that I can\'t seem to wrap my head around!', me: true},
       // {id: '6', timestamp: 1478095544843, text: 'I\'m stuck with these crappy native style attributes that I can\'t seem to wrap my head around!', me: true},
       // {id: '7', timestamp: 1478095544843, text: 'I\'m stuck with these crappy native style attributes that I can\'t seem to wrap my head around!', me: true},
-      {id: '8', timestamp: 1478095544843, text: 'I\'m stuck with these crappy native style attributes that I can\'t seem to wrap my head around!', me: true}
+      // {id: '8', timestamp: 1478095544843, text: 'I\'m stuck with these crappy native style attributes that I can\'t seem to wrap my head around!', me: true}
     ]
 
     this.state = {
@@ -59,12 +59,16 @@ class app extends Component {
               this._submit(currentText, dataSource)
             }}
           />
-          <TouchableHighlight style={styles.button}
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={'rgba(0, 128, 51, 0.25)'}
+            style={styles.button}
+            disabled={!!currentText.length}
             onPress={() => {
               this._submit(currentText, dataSource)
             }}
           >
-            <Icon style={[styles.icon, (currentText.length ? '' : styles.disabled)]} name='send' size={20} />
+            <Icon style={[styles.icon, (!currentText.length ? '' : styles.disabled)]} name='send' size={20} />
           </TouchableHighlight>
         </View>
       </View>
@@ -72,6 +76,9 @@ class app extends Component {
   }
 
   _submit (text, dataSource) {
+    if (!text) {
+      return
+    }
     this._messages = this._messages.concat({
       id: (Math.random() + '').substr(3, 10),
       timestamp: moment().valueOf(),
@@ -83,7 +90,6 @@ class app extends Component {
       dataSource: dataSource.cloneWithRows(this._messages)
     })
     sendMessage(text).then((result) => {
-      console.log(Object.keys(result.result))
       let response = _.get(result, 'result.fulfillment.speech')
       if (response) {
         this._messages = this._messages.concat({
@@ -121,6 +127,8 @@ const styles = StyleSheet.create({
   button: {
     width: 40,
     padding: 10,
+    marginRight: 5,
+    borderRadius: 20,
     alignSelf: 'flex-end'
   }
 })
