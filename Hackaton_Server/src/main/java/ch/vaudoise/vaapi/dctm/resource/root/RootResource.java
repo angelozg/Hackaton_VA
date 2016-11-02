@@ -8,6 +8,8 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
+
+import ch.vaudoise.vaapi.dctm.model.DeclarationEau;
 import ch.vaudoise.vaapi.dctm.utils.JsonTransformation;
 
 @Path("")
@@ -53,5 +55,6 @@ public class RootResource {
 
       return Response.ok().entity(JsonTransformation.toJson(test)).build();
    }
+   
 
 }
