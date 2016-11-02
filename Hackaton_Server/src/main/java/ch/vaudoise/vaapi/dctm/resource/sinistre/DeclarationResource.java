@@ -1,5 +1,5 @@
 
-package ch.vaudoise.vaapi.dctm.resource.root;
+package ch.vaudoise.vaapi.dctm.resource.sinistre;
 
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -15,11 +15,6 @@ public class DeclarationResource {
    @Path("eau")
    public Response putToto(DeclarationEau declaration) {
 
-	  System.out.println(declaration.getFirstName());
-	  System.out.println(declaration.getName());
-	  System.out.println(declaration.getAdress());
-	  System.out.println(declaration.getPhoneNumber());
-	  System.out.println(declaration.getComment());
 
 	  
 	  
