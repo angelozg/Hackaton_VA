@@ -26,6 +26,6 @@ export function sendMessage (message) {
   })
   .catch((error) => {
     console.log(error)
-    return 'Une erreur est survenue'
+    return _.set({}, 'result.fulfillment.speech', 'Une erreur est survenue, pouvez-vous me réexpliquer?')
   })
 }

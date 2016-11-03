@@ -11,6 +11,9 @@
         </div>
       </div>
     </div>
+    <div v-else class="prompt">
+      Bonjour, comment pouvons nous vous aider?
+    </div>
   </div>
 </template>
 
@@ -36,16 +39,21 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 .list {
-  width: 100%;
   border: 2px solid #007d32;
   border-radius: 10px;
   margin: 10px;
-  height: 600px;
+  flex: 1 1 auto;
   overflow-y: scroll;
+  min-height: 0;
 
   .scrollWrapper {
     overflow: auto;
-    min-height: 600px;
+  }
+
+  .prompt {
+    padding-top: 100px;
+    padding-bottom: 100px;
+    text-align: center;
   }
 
   .message {
