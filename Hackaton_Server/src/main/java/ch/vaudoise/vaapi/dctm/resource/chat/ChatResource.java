@@ -68,7 +68,7 @@ public class ChatResource {
 			parameters.append("user_location", Address.getAddress(parameters.getString("user_lastname").toLowerCase()));
 			
 			JSONObject fulfillment = root.getJSONObject("result").getJSONObject("fulfillment");
-			String value = fulfillment.getString("fulfillment");
+			String value = fulfillment.getString("speech");
 			value.replace("route du Merley 16, 1233 Bernex",Address.getAddress(parameters.getString("user_lastname").toLowerCase()));
 			parameters.remove("speech");
 			parameters.append("speech", value);
@@ -102,7 +102,7 @@ public class ChatResource {
 		String line;
 		try {
 
-			br = new BufferedReader(new InputStreamReader(is));
+			br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 			while ((line = br.readLine()) != null) {
 				sb.append(line);
 			}
