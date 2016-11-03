@@ -81,8 +81,8 @@ public class ChatResource {
 			value =	value.replace("route du Merley 16, 1233 Bernex",Address.getAddress(parameters.getString("user_lastname").toLowerCase()));
 			fulfillment.remove("speech");
 			fulfillment.put("speech", (String)value);
-			System.out.println(root.toString());
-			
+			root.getJSONObject("result").remove("fulfillment");
+			root.getJSONObject("result").put("fulfillment", fulfillment);			
 			
 			break;
 		case "confirm.hasinsurance":
@@ -125,10 +125,27 @@ public class ChatResource {
 			break;
 			
 		case "ask.emergency":
+			fulfillment = root.getJSONObject("result").getJSONObject("fulfillment");
+			value = fulfillment.getString("speech");
+			
 			JSONObject emData = root.getJSONObject("result").getJSONArray("contexts").getJSONObject(0).getJSONObject("parameters");
 			String location = emData.getString("user_location");
-			String plumberAdr = PlumberList.getPlumber(location.toLowerCase());
-			System.out.println(plumberAdr);
+			String[] splitArray = location.split("\\s+");
+			String plumberAdr = "";
+			for(int i=0; i<splitArray.length; i++) {
+				plumberAdr = PlumberList.getPlumber(splitArray[i].toLowerCase());
+			}								
+			if(StringUtils.isNotEmpty(plumberAdr)) {
+				value.replace("XXX", plumberAdr);
+				value.replace("YYY", location);
+			} else {
+				value = "Désolé, nous n'avons pas trouvé d'intervenant dans votre secteur ! Souhaitez-vous que je vous aide pour effectuer votre déclaration ?";
+			}
+			fulfillment.remove("speech");
+			fulfillment.put("speech", (String)value);
+			
+			root.getJSONObject("result").remove("fulfillment");
+			root.getJSONObject("result").put("fulfillment", fulfillment);			
 		}
 
 
