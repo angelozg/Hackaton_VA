@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.Normalizer;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -86,7 +87,8 @@ public class ChatResource {
 			
 			break;
 		case "confirm.hasinsurance":
-			String userLastname = root.getJSONObject("result").getJSONObject("parameters").getString("user_lastname");			
+			String userLastname = root.getJSONObject("result").getJSONObject("parameters").getString("user_lastname");	
+			userLastname = StringUtils.stripAccents(userLastname);
 			String hasCover = InsuranceCover.getCover(userLastname.toLowerCase());
 			
 			ObjectMapper om = new ObjectMapper();			
@@ -136,8 +138,8 @@ public class ChatResource {
 				plumberAdr = PlumberList.getPlumber(splitArray[i].toLowerCase());
 			}								
 			if(StringUtils.isNotEmpty(plumberAdr)) {
-				value.replace("XXX", plumberAdr);
-				value.replace("YYY", location);
+				value = value.replace("XXX", plumberAdr);
+				value = value.replace("YYY", location);
 			} else {
 				value = "Désolé, nous n'avons pas trouvé d'intervenant dans votre secteur ! Souhaitez-vous que je vous aide pour effectuer votre déclaration ?";
 			}
