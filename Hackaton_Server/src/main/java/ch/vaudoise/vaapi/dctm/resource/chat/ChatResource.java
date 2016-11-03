@@ -68,13 +68,24 @@ public class ChatResource {
 				EmergencyResource.sendMailWater(em);
 			}
 			break;
+		case "confirm.adress":
+			JSONObject parameters = root.getJSONObject("result").getJSONObject("parameters");
+			parameters.remove("user_location");
+			parameters.append("user_location", "Chemin de Somais 9, 1009 Pully");
+			
+			JSONObject fulfillment = root.getJSONObject("result").getJSONObject("fulfillment");
+			String value = fulfillment.getString("fulfillment");
+			value.replace("route du Merley 16, 1233 Bernex","Chemin de Somais 9, 1009 Pully" );
+			parameters.remove("speech");
+			parameters.append("speech", value);
+			break;
 		}
 
+		
 
 
 
-
-		return Response.ok().entity(receiveData).build();
+		return Response.ok().entity(root.toString()).build();
 	}
 
 	/**
