@@ -68,6 +68,19 @@ export default {
         }
       })
     }
+  },
+  ready () {
+    sendMessage('bonjour').then((result) => {
+      let response = _.get(result, 'result.fulfillment.speech')
+      if (response) {
+        this.messages = this.messages.concat({
+          id: result.id,
+          timestamp: moment().valueOf(),
+          text: response,
+          me: false
+        })
+      }
+    })
   }
 }
 </script>

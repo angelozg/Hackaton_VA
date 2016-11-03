@@ -39,6 +39,21 @@ class app extends Component {
       currentText: '',
       dataSource: ds.cloneWithRows(this._messages)
     }
+
+    sendMessage('bonjour').then((result) => {
+      let response = _.get(result, 'result.fulfillment.speech')
+      if (response) {
+        this._messages = this._messages.concat({
+          id: result.id,
+          timestamp: moment().valueOf(),
+          text: response,
+          me: false
+        })
+        this.setState({
+          dataSource: this.state.dataSource.cloneWithRows(this._messages)
+        })
+      }
+    })
   }
 
   componentDidMount () {
