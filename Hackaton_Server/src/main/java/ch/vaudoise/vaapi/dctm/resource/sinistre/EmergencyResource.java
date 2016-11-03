@@ -10,11 +10,7 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.Response;
 
-import ch.vaudoise.vaapi.dctm.model.DeclarationEau;
 import ch.vaudoise.vaapi.dctm.model.Emergency;
 
 public class EmergencyResource {
