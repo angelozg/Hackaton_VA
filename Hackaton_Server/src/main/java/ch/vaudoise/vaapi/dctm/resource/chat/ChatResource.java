@@ -28,12 +28,16 @@ import ch.vaudoise.vaapi.dctm.data.Address;
 import ch.vaudoise.vaapi.dctm.data.InsuranceCover;
 import ch.vaudoise.vaapi.dctm.data.PlumberList;
 import ch.vaudoise.vaapi.dctm.model.ChatObject;
+import ch.vaudoise.vaapi.dctm.model.DeclarationEau;
 import ch.vaudoise.vaapi.dctm.model.Emergency;
+import ch.vaudoise.vaapi.dctm.resource.sinistre.DeclarationResource;
 import ch.vaudoise.vaapi.dctm.resource.sinistre.EmergencyResource;
 
 
 @Path("chat")
 public class ChatResource {
+	
+	private int claimId= 100000;
 
 
 	@POST
@@ -82,8 +86,8 @@ public class ChatResource {
 			value =	value.replace("route du Merley 16, 1233 Bernex",Address.getAddress(parameters.getString("user_lastname").toLowerCase()));
 			fulfillment.remove("speech");
 			fulfillment.put("speech", (String)value);
-			root.getJSONObject("result").remove("fulfillment");
-			root.getJSONObject("result").put("fulfillment", fulfillment);			
+//			root.getJSONObject("result").remove("fulfillment");
+//			root.getJSONObject("result").put("fulfillment", fulfillment);			
 			
 			break;
 		case "confirm.hasinsurance":
@@ -120,8 +124,8 @@ public class ChatResource {
 				fulfillment.remove("speech");
 				fulfillment.put("speech", (String)value);
 				
-				root.getJSONObject("result").remove("fulfillment");
-				root.getJSONObject("result").put("fulfillment", fulfillment);
+//				root.getJSONObject("result").remove("fulfillment");
+//				root.getJSONObject("result").put("fulfillment", fulfillment);
 			}
 			
 			break;
@@ -146,8 +150,30 @@ public class ChatResource {
 			fulfillment.remove("speech");
 			fulfillment.put("speech", (String)value);
 			
-			root.getJSONObject("result").remove("fulfillment");
-			root.getJSONObject("result").put("fulfillment", fulfillment);			
+//			root.getJSONObject("result").remove("fulfillment");
+//			root.getJSONObject("result").put("fulfillment", fulfillment);	
+			break;
+			
+		case "create_declaration":
+			fulfillment = root.getJSONObject("result").getJSONObject("fulfillment");
+			value = fulfillment.getString("speech");
+			value.replace("123456/16", claimId+"/16");
+			
+			fulfillment.remove("speech");
+			fulfillment.put("speech", (String)value);
+			
+			
+			
+			JSONObject param = root.getJSONObject("result").getJSONArray("contexts").getJSONObject(0).getJSONObject("parameters");
+			DeclarationEau declaration = new DeclarationEau();
+			declaration.setName(param.getString("user_lastname"));
+			declaration.setFirstName(param.getString("user_firstname"));
+			declaration.setComment(param.getString("general_comment"));
+			declaration.setDescription(param.getString("general_description")+param.getString("list_damage"));
+			declaration.setAdress(Address.getAddress(param.getString("user_lastname").toLowerCase()));
+			
+			DeclarationResource.createDeclaration(declaration);
+			break;
 		}
 
 

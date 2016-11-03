@@ -41,7 +41,7 @@ public class LoadAndSetPDF {
         return resultat;
     }
 
-    public static void setPDF(String nom, String prenom, String adresse, String telephone, String commentaire) throws IOException {
+    public static void setPDF(String nom, String prenom, String adresse, String telephone, String commentaire, String description) throws IOException {
         String adressePart1 = null;
         String adressePart2 = null;
         String[] adresseTab = adressParser(adresse);
@@ -50,7 +50,7 @@ public class LoadAndSetPDF {
             adressePart2= (adresseTab[2] + " " + adresseTab[3]);
         }
         //Loading an existing document 
-        File file = new File("/Users/fatenlabidi/Desktop/Hackaton_VA-master/declaration.pdf");
+        File file = new File("c:/declaration.pdf");
         try (PDDocument document = PDDocument.load(file)) {
             
             PDDocumentCatalog docCatalog = document.getDocumentCatalog();
@@ -72,7 +72,7 @@ public class LoadAndSetPDF {
                 PDField field = acroForm.getField(f);
                 System.out.println(f);
                 switch (f) {
-                    case "Nom pr√©nom ou raison sociale": {
+                    case "Nom prÈnom ou raison sociale": {
                         if (nom != null && nom != null) {
                             field.setValue(nom + " " + prenom);
                             break;
@@ -90,7 +90,7 @@ public class LoadAndSetPDF {
                             break;
                         }
                     }
-                    case "NPA et localit√©": {
+                    case "NPA et localitÈ": {
                         if (adressePart2 != null) {
                             field.setValue(adressePart2);
                             break;
@@ -99,7 +99,7 @@ public class LoadAndSetPDF {
                         break;
                         }
                     }
-                    case "T√©l√©phone et et fax": {
+                    case "TÈlÈphone et et fax": {
                         if (telephone != null) {
                             field.setValue(telephone);
                             break;
@@ -128,7 +128,7 @@ public class LoadAndSetPDF {
                         field.setValue("Protect");
                         break;
                     }
-                    case "Num√©ro de contrat dassurance ex1234562200": {
+                    case "NumÈro de contrat dassurance ex1234562200": {
                         field.setValue("xxxx xxxx xxxx xxxx");
                         break;
                     }
@@ -137,18 +137,23 @@ public class LoadAndSetPDF {
                             field.setValue(commentaire);
                             break;
                         } else {
-                            field.setValue("Rien √† signaler ...");
+                            field.setValue("Rien ‡† signaler ...");
                             break;
                         }
                     }
                     case "Description de": {
-                        field.setValue("J'ai subis des d√©g√¢ts au niveau des murs, du plafond");
-                        break;
+                    	if (description != null) {
+                            field.setValue(description);
+                            break;
+                        } else {
+                            field.setValue("Rien ‡† signaler ...");
+                            break;
+                        }
                     }
                 }
             }
             //Saving the document
-            document.save("/Users/fatenlabidi/Desktop/Hackaton_VA-master/declarationRemplie.pdf");
+            document.save("c:/declarationRemplie.pdf");
 
             //Closing the document  
             document.close();
