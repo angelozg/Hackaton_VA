@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 
 import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.POST;
@@ -29,16 +30,17 @@ public class ChatResource {
 
 	@POST
 	@Path("")
-	public Response postChat(String chatObject) {
+	public Response postChat(String chatObject) throws UnsupportedEncodingException {
 
-
+		String valuePost = new String(chatObject.getBytes("UTF-8"), "UTF-8");
+		
 		Client client = ClientBuilder.newBuilder().build();
 		WebTarget target = client.target("https://api.api.ai/v1/query?v=2015091");
 
 		Builder builder = getBuilder(target);
 
 
-		Response resp =  builder.post(Entity.entity(chatObject, MediaType.APPLICATION_JSON));
+		Response resp =  builder.post(Entity.entity(valuePost,"application/json; charset=UTF-8"));
 
 		InputStream is = (InputStream) resp.getEntity();
 		String receiveData = getStringFromInputStream(is);
@@ -61,17 +63,20 @@ public class ChatResource {
 			}
 			break;
 		case "confirm.adress":
-			JSONObject parameters = root.getJSONObject("result").getJSONObject("parameters");
+			JSONObject parameters = root.getJSONObject("result").getJSONArray("contexts").getJSONObject(0).getJSONObject("parameters");
 			
 			
 			parameters.remove("user_location");
-			parameters.append("user_location", Address.getAddress(parameters.getString("user_lastname").toLowerCase()));
+			parameters.put("user_location", Address.getAddress(parameters.getString("user_lastname").toLowerCase()));
 			
 			JSONObject fulfillment = root.getJSONObject("result").getJSONObject("fulfillment");
 			String value = fulfillment.getString("speech");
-			value.replace("route du Merley 16, 1233 Bernex",Address.getAddress(parameters.getString("user_lastname").toLowerCase()));
-			parameters.remove("speech");
-			parameters.append("speech", value);
+			value =	value.replace("route du Merley 16, 1233 Bernex",Address.getAddress(parameters.getString("user_lastname").toLowerCase()));
+			fulfillment.remove("speech");
+			fulfillment.put("speech", (String)value);
+			System.out.println(root.toString());
+			
+			
 			break;
 		}
 
@@ -89,7 +94,7 @@ public class ChatResource {
 	 * @return
 	 */
 	private Builder getBuilder(WebTarget target) {
-		return target.request().header("Authorization", "Bearer 2fc4af45ff184caa8822a303836982f5")
+		return target.request().header("Authorization", "Bearer 2fc4af45ff184caa8822a303836982f5").header("content-type", "application/json;charset=UTF-8")
 				.accept(MediaType.APPLICATION_JSON);
 	}
 
