@@ -109,11 +109,11 @@ public class ChatResource {
 				String location = root.getJSONObject("result").getJSONArray("contexts").getJSONObject(0).getJSONObject("parameters").getString("user_location");
 				String[] splitArray = location.split("\\s+");
 				String plumberAdr = "";
-				for(int i=0; i<=splitArray.length; i++) {
-					plumberAdr = PlumberList.getPlumber(location.toLowerCase());
+				for(int i=0; i<splitArray.length; i++) {
+					plumberAdr = PlumberList.getPlumber(splitArray[i].toLowerCase());
 				}								
 				if(StringUtils.isNotEmpty(plumberAdr)) {
-					value = value + plumberAdr;
+					value = value + " " + plumberAdr;
 				}				
 				fulfillment.remove("speech");
 				fulfillment.put("speech", (String)value);

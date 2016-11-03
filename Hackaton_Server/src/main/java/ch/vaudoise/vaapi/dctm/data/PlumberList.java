@@ -13,6 +13,7 @@ private static Map<String, String> plumberList = new HashMap<>();
 		plumberList.put("genève", "Souza Sàrl 0223994848");
 		plumberList.put("montreux", "Hydro Pro SA 0343991212");
 		plumberList.put("neuchâtel", "Simon Cuany 0784486767");
+		plumberList.put("bernex", "François Simonin 0784484456");
 	}
 	
 	public static String getPlumber(String name){		
