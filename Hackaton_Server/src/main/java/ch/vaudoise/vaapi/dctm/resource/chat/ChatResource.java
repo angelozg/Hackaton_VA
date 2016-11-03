@@ -5,21 +5,26 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 
-import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
 import ch.vaudoise.vaapi.dctm.data.Address;
+import ch.vaudoise.vaapi.dctm.data.InsuranceCover;
+import ch.vaudoise.vaapi.dctm.model.ChatObject;
 import ch.vaudoise.vaapi.dctm.model.Emergency;
 import ch.vaudoise.vaapi.dctm.resource.sinistre.EmergencyResource;
 
@@ -30,7 +35,7 @@ public class ChatResource {
 
 	@POST
 	@Path("")
-	public Response postChat(String chatObject) throws UnsupportedEncodingException {
+	public Response postChat(String chatObject) throws JsonParseException, JsonMappingException, IOException {
 
 		String valuePost = new String(chatObject.getBytes("UTF-8"), "UTF-8");
 		
@@ -78,13 +83,30 @@ public class ChatResource {
 			
 			
 			break;
+		case "confirm.hasinsurance":
+			String userLastname = root.getJSONObject("result").getJSONObject("parameters").getString("user_lastname");			
+			String hasCover = InsuranceCover.getCover(userLastname.toLowerCase());
+			
+			ObjectMapper om = new ObjectMapper();			
+			om.configure(org.codehaus.jackson.JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
+			ChatObject query = om.readValue(chatObject, ChatObject.class);
+			
+			query.setQ(hasCover);
+			
+			//query the APi again
+			resp =  builder.post(Entity.entity(query,"application/json; charset=UTF-8"));
+			
+			is = (InputStream) resp.getEntity();
+			receiveData = getStringFromInputStream(is);
+			root = new JSONObject(receiveData) ;
+			
+			break;
+			
 		}
 
-		
 
-
-
-		return Response.ok().entity(root.toString()).build();
+		return Response.ok()				
+				.entity(root.toString()).build();
 	}
 
 	/**
