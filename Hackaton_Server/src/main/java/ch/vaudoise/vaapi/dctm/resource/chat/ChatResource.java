@@ -16,6 +16,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONObject;
 
@@ -24,6 +25,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import ch.vaudoise.vaapi.dctm.data.Address;
 import ch.vaudoise.vaapi.dctm.data.InsuranceCover;
+import ch.vaudoise.vaapi.dctm.data.PlumberList;
 import ch.vaudoise.vaapi.dctm.model.ChatObject;
 import ch.vaudoise.vaapi.dctm.model.Emergency;
 import ch.vaudoise.vaapi.dctm.resource.sinistre.EmergencyResource;
@@ -100,8 +102,33 @@ public class ChatResource {
 			receiveData = getStringFromInputStream(is);
 			root = new JSONObject(receiveData) ;
 			
+			// case if there is no cover - we will send an address for some plumber near the locality
+			if(hasCover.equals("non")) {
+				fulfillment = root.getJSONObject("result").getJSONObject("fulfillment");
+				value = fulfillment.getString("speech");
+				String location = root.getJSONObject("result").getJSONArray("contexts").getJSONObject(0).getJSONObject("parameters").getString("user_location");
+				String[] splitArray = location.split("\\s+");
+				String plumberAdr = "";
+				for(int i=0; i<=splitArray.length; i++) {
+					plumberAdr = PlumberList.getPlumber(location.toLowerCase());
+				}								
+				if(StringUtils.isNotEmpty(plumberAdr)) {
+					value = value + plumberAdr;
+				}				
+				fulfillment.remove("speech");
+				fulfillment.put("speech", (String)value);
+				
+				root.getJSONObject("result").remove("fulfillment");
+				root.getJSONObject("result").put("fulfillment", fulfillment);
+			}
+			
 			break;
 			
+		case "ask.emergency":
+			JSONObject emData = root.getJSONObject("result").getJSONArray("contexts").getJSONObject(0).getJSONObject("parameters");
+			String location = emData.getString("user_location");
+			String plumberAdr = PlumberList.getPlumber(location.toLowerCase());
+			System.out.println(plumberAdr);
 		}
 
 
