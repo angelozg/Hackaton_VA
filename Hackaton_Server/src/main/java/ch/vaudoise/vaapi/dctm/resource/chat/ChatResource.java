@@ -5,18 +5,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Properties;
 
 import javax.ws.rs.client.Invocation.Builder;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -27,6 +18,7 @@ import javax.ws.rs.core.Response;
 
 import org.json.JSONObject;
 
+import ch.vaudoise.vaapi.dctm.data.Address;
 import ch.vaudoise.vaapi.dctm.model.Emergency;
 import ch.vaudoise.vaapi.dctm.resource.sinistre.EmergencyResource;
 
@@ -70,8 +62,10 @@ public class ChatResource {
 			break;
 		case "confirm.adress":
 			JSONObject parameters = root.getJSONObject("result").getJSONObject("parameters");
+			
+			
 			parameters.remove("user_location");
-			parameters.append("user_location", "Chemin de Somais 9, 1009 Pully");
+			parameters.append("user_location", Address.getAddress(parameters.getString("user_lastname").toLowerCase()));
 			
 			JSONObject fulfillment = root.getJSONObject("result").getJSONObject("fulfillment");
 			String value = fulfillment.getString("fulfillment");
