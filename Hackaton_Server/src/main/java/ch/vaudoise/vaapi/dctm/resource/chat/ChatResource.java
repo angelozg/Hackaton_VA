@@ -59,20 +59,20 @@ public class ChatResource {
 
 
 		switch(root.getJSONObject("result").getString("action")){
-		case "emergency_call":
-			JSONObject data = root.getJSONObject("result").getJSONArray("contexts").getJSONObject(0).getJSONObject("parameters");
-			String type= data.getString("sinister_type");
-
-			Emergency em = new Emergency();
-			em.setAdress(data.getString("user_location"));
-			em.setFirstName(data.getString("user_firstname"));
-			em.setName(data.getString("user_lastname"));
-
-
-			if(type.equals("dégat d'eau")){
-				EmergencyResource.sendMailWater(em);
-			}
-			break;
+//		case "emergency_call":
+//			JSONObject data = root.getJSONObject("result").getJSONArray("contexts").getJSONObject(0).getJSONObject("parameters");
+//			String type= data.getString("sinister_type");
+//
+//			Emergency em = new Emergency();
+//			em.setAdress(data.getString("user_location"));
+//			em.setFirstName(data.getString("user_firstname"));
+//			em.setName(data.getString("user_lastname"));
+//
+//
+//			if(type.equals("dégat d'eau")){
+//				EmergencyResource.sendMailWater(em);
+//			}
+//			break;
 		case "confirm.adress":
 			JSONObject parameters = root.getJSONObject("result").getJSONArray("contexts").getJSONObject(0).getJSONObject("parameters");
 			
@@ -125,6 +125,17 @@ public class ChatResource {
 				
 //				root.getJSONObject("result").remove("fulfillment");
 //				root.getJSONObject("result").put("fulfillment", fulfillment);
+				
+			}else{
+				JSONObject p = root.getJSONObject("result").getJSONArray("contexts").getJSONObject(0).getJSONObject("parameters");
+				p.remove("user_location");
+				p.put("user_location", Address.getAddress(p.getString("user_lastname").toLowerCase()));
+				
+				JSONObject fillment = root.getJSONObject("result").getJSONObject("fulfillment");
+				String v = fillment.getString("speech");
+				v =	v.replace("route du Merley 16, 1233 Bernex",Address.getAddress(p.getString("user_lastname").toLowerCase()));
+				fillment.remove("speech");
+				fillment.put("speech", (String)v);
 			}
 			
 			break;
@@ -151,6 +162,18 @@ public class ChatResource {
 			}
 			fulfillment.remove("speech");
 			fulfillment.put("speech", (String)value);
+			
+			
+			
+			String type= emData.getString("sinister_type");
+			if(type.equals("water_issue")){
+				Emergency em = new Emergency();
+				em.setAdress(emData.getString("user_location"));
+				em.setFirstName(emData.getString("user_firstname"));
+				em.setName(emData.getString("user_lastname"));
+				EmergencyResource.sendMailWater(em);
+			}
+			
 			
 //			root.getJSONObject("result").remove("fulfillment");
 //			root.getJSONObject("result").put("fulfillment", fulfillment);	

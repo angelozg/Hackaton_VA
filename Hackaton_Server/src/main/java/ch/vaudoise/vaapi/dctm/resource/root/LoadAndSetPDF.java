@@ -23,8 +23,8 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDField;
  */
 public class LoadAndSetPDF {
     public static  String[] adressParser(String adresse) {
-        String[] resultat = null;
-        String patternString1 = ("(\\d+)[\\s,]*([\\w -'\\.]+)[\\s,]*(\\d{4})[\\s,]*([\\w-']+)");
+        String[] resultat = new String[4];
+        String patternString1 = ("([\\w -'\\.]+)[\\s,]*(\\d+)[\\s,]*(\\d{4})[\\s,]*([\\w-']+)");
 
         Pattern pattern = Pattern.compile(patternString1);
         Matcher matcher = pattern.matcher(adresse);
@@ -32,7 +32,7 @@ public class LoadAndSetPDF {
         while(matcher.find()) {
             resultat[0]= matcher.group(1);
             resultat[1]= matcher.group(2);
-            resultat[1]= matcher.group(3);
+            resultat[2]= matcher.group(3);
             resultat[3]= matcher.group(4);
             for(int i=0; i<resultat.length; i++){
                 System.out.println("Affichage tableau : " + resultat[i]);
@@ -50,7 +50,7 @@ public class LoadAndSetPDF {
             adressePart2= (adresseTab[2] + " " + adresseTab[3]);
         }
         //Loading an existing document 
-        File file = new File("c:/declaration.pdf");
+        File file = new File("C:\\test\\declaration.pdf");
         try (PDDocument document = PDDocument.load(file)) {
             
             PDDocumentCatalog docCatalog = document.getDocumentCatalog();
@@ -153,7 +153,7 @@ public class LoadAndSetPDF {
                 }
             }
             //Saving the document
-            document.save("c:/declarationRemplie.pdf");
+            document.save("C:/temp/declarationRemplie.pdf");
 
             //Closing the document  
             document.close();
