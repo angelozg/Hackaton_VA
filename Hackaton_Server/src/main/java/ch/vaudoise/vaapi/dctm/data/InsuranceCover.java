@@ -16,7 +16,11 @@ private static Map<String, String> isCover = new HashMap<>();
 	}
 	
 	public static String getCover(String name){
+		if(isCover.containsKey(name)){
 		return isCover.get(name);
+		}else{
+			return "non";
+		}
 	}
 
 }
