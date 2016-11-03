@@ -143,6 +143,9 @@ public class ChatResource {
 			}								
 			if(StringUtils.isNotEmpty(plumberAdr)) {
 				value = value.replace("XXX", plumberAdr);
+				if(location.equals("route du Merley 16, 1233 Bernex")) {
+					location =	location.replace("route du Merley 16, 1233 Bernex",Address.getAddress(emData.getString("user_lastname").toLowerCase()));
+				}
 				value = value.replace("YYY", location);
 			} else {
 				value = "Désolé, nous n'avons pas trouvé d'intervenant dans votre secteur ! Souhaitez-vous que je vous aide pour effectuer votre déclaration ?";
