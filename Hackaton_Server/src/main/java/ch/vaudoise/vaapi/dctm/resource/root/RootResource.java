@@ -19,13 +19,9 @@ public class RootResource {
    @Path("")
    public Response get() {
 
-      String s = "salut";
-      String s2 = "salut2";
-      List<String> test = new ArrayList<>();
-      test.add(s);
-      test.add(s2);
+      String s = "Application up";
 
-      return Response.ok().entity(JsonTransformation.toJson(test)).build();
+      return Response.ok().entity(JsonTransformation.toJson(s)).build();
    }
 
    @GET
