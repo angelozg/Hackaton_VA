@@ -63,12 +63,12 @@ class app extends Component {
             activeOpacity={0.8}
             underlayColor={'rgba(0, 128, 51, 0.25)'}
             style={styles.button}
-            disabled={!!currentText.length}
+            disabled={!currentText.length}
             onPress={() => {
               this._submit(currentText, dataSource)
             }}
           >
-            <Icon style={[styles.icon, (!currentText.length ? '' : styles.disabled)]} name='send' size={20} />
+            <Icon style={[styles.icon, (currentText.length ? '' : styles.disabled)]} name='send' size={20} />
           </TouchableHighlight>
         </View>
       </View>
