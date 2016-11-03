@@ -69,7 +69,7 @@ public class ChatResource {
 			
 			JSONObject fulfillment = root.getJSONObject("result").getJSONObject("fulfillment");
 			String value = fulfillment.getString("fulfillment");
-			value.replace("route du Merley 16, 1233 Bernex","Chemin de Somais 9, 1009 Pully" );
+			value.replace("route du Merley 16, 1233 Bernex",Address.getAddress(parameters.getString("user_lastname").toLowerCase()));
 			parameters.remove("speech");
 			parameters.append("speech", value);
 			break;
