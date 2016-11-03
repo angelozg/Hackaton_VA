@@ -21,6 +21,7 @@ public class EmergencyResource {
 	
    final static String username = "vaudoiseassistance";
    final static String from = "vaudoiseassistance@gmail.com";
+   final static String to = "vaudoiseassistance@gmail.com";
    final static String password = "Hackaton";
 
 
@@ -41,7 +42,7 @@ public class EmergencyResource {
 	        try {
 	            message.setFrom(new InternetAddress(from));
 
-	            message.addRecipient(Message.RecipientType.TO, new InternetAddress("testuz@gmail.com"));
+	            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 	            message.setSubject("Urgence");
 	            message.setText("Suite à un dégat d'eau Monsieur "+emergency.getName()+" à besoin d'un plombier à son adresse "+emergency.getAdress());
 	            Transport transport = session.getTransport("smtp");
