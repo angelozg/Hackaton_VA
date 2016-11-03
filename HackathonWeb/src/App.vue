@@ -1,9 +1,7 @@
 <template>
   <div id="app">
     <va-header></va-header>
-    <div class="content">
-      <message-list :messages="messages"></message-list>
-    </div>
+    <message-list :messages="messages"></message-list>
     <form class="actionBar" @submit.prevent="onSubmit" @keyup.enter.prevent="onSubmit">
       <input class="inputbox" v-model="currentText" />
       <!-- <button type="button" @click="onSubmit">send</button> -->
@@ -75,19 +73,13 @@ export default {
 </script>
 
 <style lang="scss">
-html {
-  height: 100%;
-}
-
-.content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+html, body {
   height: 100%;
 }
 
 .actionBar {
   margin: 10px 20px;
+  min-height: 30px;
   display: flex;
 
   .inputbox {
@@ -105,6 +97,7 @@ html {
 
   .button {
     color: #777;
+    padding: 5px;
 
     &.active {
       color: #007d32;
@@ -114,6 +107,9 @@ html {
 }
 
 #app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   font-family: Source Sans Pro, Helvetica, sans-serif;
 }
 
