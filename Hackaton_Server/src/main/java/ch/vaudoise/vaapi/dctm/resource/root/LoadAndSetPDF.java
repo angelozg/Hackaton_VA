@@ -34,9 +34,9 @@ public class LoadAndSetPDF {
             resultat[1]= matcher.group(2);
             resultat[2]= matcher.group(3);
             resultat[3]= matcher.group(4);
-            for(int i=0; i<resultat.length; i++){
-                System.out.println("Affichage tableau : " + resultat[i]);
-            }
+//            for(int i=0; i<resultat.length; i++){
+//                System.out.println("Affichage tableau : " + resultat[i]);
+//            }
         }
         return resultat;
     }
@@ -50,7 +50,7 @@ public class LoadAndSetPDF {
             adressePart2= (adresseTab[2] + " " + adresseTab[3]);
         }
         //Loading an existing document 
-        File file = new File("C:\\test\\declaration.pdf");
+        File file = new File("C:\\Temp\\declaration.pdf");
         try (PDDocument document = PDDocument.load(file)) {
             
             PDDocumentCatalog docCatalog = document.getDocumentCatalog();
@@ -70,7 +70,7 @@ public class LoadAndSetPDF {
             // Loop through each field in the array and fill the blanks
             for (String f : fieldArray) {
                 PDField field = acroForm.getField(f);
-                System.out.println(f);
+//                System.out.println(f);
                 switch (f) {
                     case "Nom prénom ou raison sociale": {
                         if (nom != null && nom != null) {
@@ -104,32 +104,32 @@ public class LoadAndSetPDF {
                             field.setValue(telephone);
                             break;
                         } else {
-                            field.setValue("021 387 22 33");
+                            field.setValue("");
                             break;
                         }
                     }
                     case "Email": {
-                        field.setValue("vaudoise@assurance.com");
+                        field.setValue("");
                         break;
                     }
                     case "Nom de la personne de contact": {
-                        field.setValue("George Clooney");
+                    	field.setValue(nom + " " + prenom);
                         break;
                     }
                     case "CCP ou compte bancaire": {
-                        field.setValue("xxxx xxxx xxxx xxxx x");
+                        field.setValue("");
                         break;
                     }
                     case "Si oui N TVA": {
-                        field.setValue("xxxx xxxx xxxx xxxx");
+                        field.setValue("");
                         break;
                     }
                     case "Si oui compagnie": {
-                        field.setValue("Protect");
+                        field.setValue("");
                         break;
                     }
                     case "Numéro de contrat dassurance ex1234562200": {
-                        field.setValue("xxxx xxxx xxxx xxxx");
+                        field.setValue("1234564100");
                         break;
                     }
                     case "Remarques": {
