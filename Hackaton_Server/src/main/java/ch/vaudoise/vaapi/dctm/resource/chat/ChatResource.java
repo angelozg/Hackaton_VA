@@ -35,7 +35,7 @@ import ch.vaudoise.vaapi.dctm.resource.sinistre.EmergencyResource;
 
 @Path("chat")
 public class ChatResource {
-	
+
 	private int claimId= 100000;
 
 
@@ -44,7 +44,7 @@ public class ChatResource {
 	public Response postChat(String chatObject) throws JsonParseException, JsonMappingException, IOException {
 
 		String valuePost = new String(chatObject.getBytes("UTF-8"), "UTF-8");
-		
+
 		Client client = ClientBuilder.newBuilder().build();
 		WebTarget target = client.target("https://api.api.ai/v1/query?v=2015091");
 
@@ -59,54 +59,54 @@ public class ChatResource {
 
 
 		switch(root.getJSONObject("result").getString("action")){
-//		case "emergency_call":
-//			JSONObject data = root.getJSONObject("result").getJSONArray("contexts").getJSONObject(0).getJSONObject("parameters");
-//			String type= data.getString("sinister_type");
-//
-//			Emergency em = new Emergency();
-//			em.setAdress(data.getString("user_location"));
-//			em.setFirstName(data.getString("user_firstname"));
-//			em.setName(data.getString("user_lastname"));
-//
-//
-//			if(type.equals("dégat d'eau")){
-//				EmergencyResource.sendMailWater(em);
-//			}
-//			break;
+		//		case "emergency_call":
+		//			JSONObject data = root.getJSONObject("result").getJSONArray("contexts").getJSONObject(0).getJSONObject("parameters");
+		//			String type= data.getString("sinister_type");
+		//
+		//			Emergency em = new Emergency();
+		//			em.setAdress(data.getString("user_location"));
+		//			em.setFirstName(data.getString("user_firstname"));
+		//			em.setName(data.getString("user_lastname"));
+		//
+		//
+		//			if(type.equals("dégat d'eau")){
+		//				EmergencyResource.sendMailWater(em);
+		//			}
+		//			break;
 		case "confirm.adress":
 			JSONObject parameters = root.getJSONObject("result").getJSONArray("contexts").getJSONObject(0).getJSONObject("parameters");
-			
-			
+
+
 			parameters.remove("user_location");
 			parameters.put("user_location", Address.getAddress(parameters.getString("user_lastname").toLowerCase()));
-			
+
 			JSONObject fulfillment = root.getJSONObject("result").getJSONObject("fulfillment");
 			String value = fulfillment.getString("speech");
 			value =	value.replace("route du Merley 16, 1233 Bernex",Address.getAddress(parameters.getString("user_lastname").toLowerCase()));
 			fulfillment.remove("speech");
 			fulfillment.put("speech", (String)value);
-//			root.getJSONObject("result").remove("fulfillment");
-//			root.getJSONObject("result").put("fulfillment", fulfillment);			
-			
+			//			root.getJSONObject("result").remove("fulfillment");
+			//			root.getJSONObject("result").put("fulfillment", fulfillment);			
+
 			break;
 		case "confirm.hasinsurance":
 			String userLastname = root.getJSONObject("result").getJSONObject("parameters").getString("user_lastname");	
 			userLastname = StringUtils.stripAccents(userLastname);
 			String hasCover = InsuranceCover.getCover(userLastname.toLowerCase());
-			
+
 			ObjectMapper om = new ObjectMapper();			
 			om.configure(org.codehaus.jackson.JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
 			ChatObject query = om.readValue(chatObject, ChatObject.class);
-			
+
 			query.setQ(hasCover);
-			
+
 			//query the APi again
 			resp =  builder.post(Entity.entity(query,"application/json; charset=UTF-8"));
-			
+
 			is = (InputStream) resp.getEntity();
 			receiveData = getStringFromInputStream(is);
 			root = new JSONObject(receiveData) ;
-			
+
 			// case if there is no cover - we will send an address for some plumber near the locality
 			if(hasCover.equals("non")) {
 				fulfillment = root.getJSONObject("result").getJSONObject("fulfillment");
@@ -122,28 +122,28 @@ public class ChatResource {
 				}				
 				fulfillment.remove("speech");
 				fulfillment.put("speech", (String)value);
-				
-//				root.getJSONObject("result").remove("fulfillment");
-//				root.getJSONObject("result").put("fulfillment", fulfillment);
-				
+
+				//				root.getJSONObject("result").remove("fulfillment");
+				//				root.getJSONObject("result").put("fulfillment", fulfillment);
+
 			}else{
 				JSONObject p = root.getJSONObject("result").getJSONArray("contexts").getJSONObject(0).getJSONObject("parameters");
 				p.remove("user_location");
 				p.put("user_location", Address.getAddress(p.getString("user_lastname").toLowerCase()));
-				
+
 				JSONObject fillment = root.getJSONObject("result").getJSONObject("fulfillment");
 				String v = fillment.getString("speech");
 				v =	v.replace("route du Merley 16, 1233 Bernex",Address.getAddress(p.getString("user_lastname").toLowerCase()));
 				fillment.remove("speech");
 				fillment.put("speech", (String)v);
 			}
-			
+
 			break;
-			
+
 		case "ask.emergency":
 			fulfillment = root.getJSONObject("result").getJSONObject("fulfillment");
 			value = fulfillment.getString("speech");
-			
+
 			JSONObject emData = root.getJSONObject("result").getJSONArray("contexts").getJSONObject(0).getJSONObject("parameters");
 			String location = emData.getString("user_location");
 			String[] splitArray = location.split("\\s+");
@@ -162,47 +162,53 @@ public class ChatResource {
 			}
 			fulfillment.remove("speech");
 			fulfillment.put("speech", (String)value);
-			
-			
-			
-			String type= emData.getString("sinister_type");
-			if(type.equals("water_issue")){
-				Emergency em = new Emergency();
-				em.setAdress(emData.getString("user_location"));
-				em.setFirstName(emData.getString("user_firstname"));
-				em.setName(emData.getString("user_lastname"));
-				EmergencyResource.sendMailWater(em);
+
+
+			try{
+				String type= emData.getString("sinister_type");
+				if(type.equals("water_issue")){
+					Emergency em = new Emergency();
+					em.setAdress(emData.getString("user_location"));
+					em.setFirstName(emData.getString("user_firstname"));
+					em.setName(emData.getString("user_lastname"));
+					EmergencyResource.sendMailWater(em);
+				}
+			}catch(Exception e){
+				System.out.println("erreur d'envoi de mail");
 			}
-			
-			
-//			root.getJSONObject("result").remove("fulfillment");
-//			root.getJSONObject("result").put("fulfillment", fulfillment);	
+
+
+			//			root.getJSONObject("result").remove("fulfillment");
+			//			root.getJSONObject("result").put("fulfillment", fulfillment);	
 			break;
-			
+
 		case "create_declaration":
 			fulfillment = root.getJSONObject("result").getJSONObject("fulfillment");
 			value = fulfillment.getString("speech");
 			value.replace("123456/16", claimId+"/16");
-			
+
 			fulfillment.remove("speech");
 			fulfillment.put("speech", (String)value);
-			
-			
-			
-			JSONObject param = root.getJSONObject("result").getJSONArray("contexts").getJSONObject(0).getJSONObject("parameters");
-			DeclarationEau declaration = new DeclarationEau();
-			declaration.setName(param.getString("user_lastname"));
-			declaration.setFirstName(param.getString("user_firstname"));
-			declaration.setComment(param.getString("general_comment"));
-			declaration.setDescription(param.getString("general_description")+param.getString("list_damage"));
-			
-			String address = param.getString("user_location");
-			if(address.equals(address.equals("route du Merley 16, 1233 Bernex"))){
-				address = Address.getAddress(param.getString("user_lastname").toLowerCase());
+
+
+			try{
+				JSONObject param = root.getJSONObject("result").getJSONArray("contexts").getJSONObject(0).getJSONObject("parameters");
+				DeclarationEau declaration = new DeclarationEau();
+				declaration.setName(param.getString("user_lastname"));
+				declaration.setFirstName(param.getString("user_firstname"));
+				declaration.setComment(param.getString("general_comment"));
+				declaration.setDescription(param.getString("general_description")+param.getString("list_damage"));
+
+				String address = param.getString("user_location");
+				if(address == null || address.equals(address.equals("route du Merley 16, 1233 Bernex")) || address.equals("")){
+					address = Address.getAddress(param.getString("user_lastname").toLowerCase());
+				}
+				declaration.setAdress(address);
+
+				DeclarationResource.createDeclaration(declaration);
+			}catch(Exception e){
+				System.out.println("Erreur creation pdf");
 			}
-			declaration.setAdress(address);
-			
-			DeclarationResource.createDeclaration(declaration);
 			break;
 		}
 
