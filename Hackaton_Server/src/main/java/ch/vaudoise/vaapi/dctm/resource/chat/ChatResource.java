@@ -164,18 +164,18 @@ public class ChatResource {
 			fulfillment.put("speech", (String)value);
 
 
-			try{
-				String type= emData.getString("sinister_type");
-				if(type.equals("water_issue")){
-					Emergency em = new Emergency();
-					em.setAdress(emData.getString("user_location"));
-					em.setFirstName(emData.getString("user_firstname"));
-					em.setName(emData.getString("user_lastname"));
-					EmergencyResource.sendMailWater(em);
-				}
-			}catch(Exception e){
-				System.out.println("erreur d'envoi de mail");
-			}
+//			try{
+//				String type= emData.getString("sinister_type");
+//				if(type.equals("water_issue")){
+//					Emergency em = new Emergency();
+//					em.setAdress(emData.getString("user_location"));
+//					em.setFirstName(emData.getString("user_firstname"));
+//					em.setName(emData.getString("user_lastname"));
+//					EmergencyResource.sendMailWater(em);
+//				}
+//			}catch(Exception e){
+//				System.out.println("erreur d'envoi de mail");
+//			}
 
 
 			//			root.getJSONObject("result").remove("fulfillment");
