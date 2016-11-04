@@ -13,6 +13,10 @@ private static Map<String, String> isCover = new HashMap<>();
 		isCover.put("angeloz", "non");
 		isCover.put("menes", "non");
 		isCover.put("deschamps", "oui");
+		isCover.put("hebeisen", "oui");
+		isCover.put("morelli", "oui");
+		
+		
 	}
 	
 	public static String getCover(String name){
