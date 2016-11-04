@@ -195,7 +195,12 @@ public class ChatResource {
 			declaration.setFirstName(param.getString("user_firstname"));
 			declaration.setComment(param.getString("general_comment"));
 			declaration.setDescription(param.getString("general_description")+param.getString("list_damage"));
-			declaration.setAdress(Address.getAddress(param.getString("user_lastname").toLowerCase()));
+			
+			String address = param.getString("user_location");
+			if(address.equals(address.equals("route du Merley 16, 1233 Bernex"))){
+				address = Address.getAddress(param.getString("user_lastname").toLowerCase());
+			}
+			declaration.setAdress(address);
 			
 			DeclarationResource.createDeclaration(declaration);
 			break;
